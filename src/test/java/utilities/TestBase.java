@@ -49,6 +49,10 @@ public abstract class TestBase {
 
     }
 
+    public void switchToWindow(int index) {
+        driver.switchTo().window(driver.getWindowHandles().toArray()[index].toString());
+    }
+
 
     //  @AfterEach
     //void tearDown() {
