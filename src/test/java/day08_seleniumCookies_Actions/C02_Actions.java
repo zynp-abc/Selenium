@@ -116,4 +116,21 @@ public class C02_Actions extends TestBase {
         Assertions.assertEquals("Dropped!", dropped);
 
     }
+
+    @Test
+    void actions07() {
+
+
+        driver.get("https://google.com");
+
+        Actions actions = new Actions(driver);
+
+        WebElement searchBox = driver.findElement(By.cssSelector("#APjFqb"));
+
+        actions.keyDown(searchBox, Keys.SHIFT).
+                sendKeys("selenium").keyUp(Keys.SHIFT).
+                sendKeys(" - java", Keys.ENTER).perform();
+
+
+    }
 }
