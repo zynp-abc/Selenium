@@ -1,5 +1,8 @@
 package utilities;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.OutputType;
@@ -16,8 +19,40 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public abstract class TestBase {
+
+    protected ExtentReports extentReports;
+
+    protected ExtentSparkReporter extentSparkReporter;
+
+    protected ExtentTest extentTest;
+
+    public void createExtentReports(String testName) {
+
+        Locale.setDefault(Locale.US);
+        extentReports = new ExtentReports();
+
+        String date = DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss").format(LocalDateTime.now());
+
+        String path = "target/extent-report-" + date + ".html";
+
+        extentSparkReporter = new ExtentSparkReporter(path);
+
+        extentReports.attachReporter(extentSparkReporter);
+
+        extentSparkReporter.config().setDocumentTitle("Automation Test Report");
+
+        extentSparkReporter.config().setReportName("Automation Test Results");
+
+        extentReports.setSystemInfo("Environment", "QA");
+        extentReports.setSystemInfo("Browser", "Chrome");
+        extentReports.setSystemInfo("Test Automation Engineer", "Zeynep");
+
+        extentTest = extentReports.createTest(testName, "Test Steps");
+    }
+
 
     protected WebDriver driver;
 
@@ -67,9 +102,10 @@ public abstract class TestBase {
         TakesScreenshot ts = (TakesScreenshot) driver;
 
         String dosyaYolu = "src/test/java/screenShots/" + date + ".jpeg";
-
+        String path = "target/extent-report-" + date + ".html";
         try {
             Files.write(Paths.get(dosyaYolu), ts.getScreenshotAs(OutputType.BYTES));
+            extentTest.addScreenCaptureFromPath(System.getProperty("user.dir") + "/" + path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,6 +119,7 @@ public abstract class TestBase {
 
         try {
             Files.write(Paths.get(dosyaYolu), webElement.getScreenshotAs(OutputType.BYTES));
+            extentTest.addScreenCaptureFromPath(System.getProperty("user.dir") + "/" + dosyaYolu);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
