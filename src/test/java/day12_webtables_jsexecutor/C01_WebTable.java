@@ -1,4 +1,4 @@
-package day12_webtables_excel;
+package day12_webtables_jsexecutor;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
