@@ -62,6 +62,10 @@ public abstract class TestBase {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
+    // @AfterEach
+    //void tearDown() {
+    //  driver.quit();}
+
     public void waitForSecond(int second) {
 
         try {
@@ -135,10 +139,30 @@ public abstract class TestBase {
         }
     }
 
+    public void jsScroll(WebElement webElement) {
 
-    // @AfterEach
-    //void tearDown() {
-    //  driver.quit();}
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("arguments[0].scrollIntoView(true)", webElement);
+
+    }
+
+    public void jsScrollEnd() {
+
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("window.scrollTo(0,document.body.scrollHeight)");
+    }
+
+    public void jsScrollUp() {
+
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("window.scrollTo(0,-document.body.scrollHeight)");
+    }
+
+    public void jsSendKeys(String value, WebElement webElement) {
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("arguments[0].value='" + value + "'", webElement);
+
+    }
 
 
 }
